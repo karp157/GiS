@@ -1,0 +1,282 @@
+<Modgraf>
+<mxGraphModel type="undirected" vertexCounter="20" weighted="0">
+<root>
+<mxCell id="0"/>
+<mxCell id="1" parent="0"/>
+<mxCell id="2" parent="1" style="vertexStyle;fillColor=#F3EF71;strokeWidth=4" value="1" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="20.0" y="10.0"/>
+</mxCell>
+<mxCell id="3" parent="1" style="vertexStyle;fillColor=#65D1DB" value="2" vertex="1">
+<mxGeometry as="geometry" height="70.0" width="50.0" x="530.0" y="410.0"/>
+</mxCell>
+<mxCell id="4" parent="1" style="vertexStyle;fillColor=#DB6F65" value="3" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="550.0" y="200.0"/>
+</mxCell>
+<mxCell id="5" parent="1" style="vertexStyle;fillColor=#DB6F65" value="4" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="740.0" y="180.0"/>
+</mxCell>
+<mxCell id="6" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="5" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="820.0" y="20.0"/>
+</mxCell>
+<mxCell id="7" parent="1" style="vertexStyle;fillColor=#65D1DB" value="6" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="10.0" y="180.0"/>
+</mxCell>
+<mxCell id="8" parent="1" style="vertexStyle;fillColor=#DB6F65" value="7" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="560.0" y="20.0"/>
+</mxCell>
+<mxCell id="9" parent="1" style="vertexStyle;fillColor=#DB6F65" value="8" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="310.0" y="190.0"/>
+</mxCell>
+<mxCell id="10" parent="1" style="vertexStyle;fillColor=#DB6F65" value="9" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="330.0" y="30.0"/>
+</mxCell>
+<mxCell edge="1" id="11" parent="1" source="2" style="strokeWidth=1" target="7" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="80.0" y="80.0"/>
+<mxPoint as="targetPoint" x="50.0" y="190.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="12" parent="1" source="7" style="strokeWidth=1" target="9" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="40.0" y="210.0"/>
+<mxPoint as="targetPoint" x="130.0" y="200.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="13" parent="1" source="2" style="strokeWidth=1" target="10" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="80.0" y="80.0"/>
+<mxPoint as="targetPoint" x="230.0" y="80.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="14" parent="1" source="10" style="strokeWidth=1" target="4" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="210.0" y="90.0"/>
+<mxPoint as="targetPoint" x="310.0" y="210.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="15" parent="1" source="4" style="strokeWidth=1" target="5" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="310.0" y="210.0"/>
+<mxPoint as="targetPoint" x="370.0" y="130.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="16" parent="1" source="8" style="strokeWidth=1" target="10" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="200.0" y="30.0"/>
+<mxPoint as="targetPoint" x="200.0" y="60.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="17" parent="1" source="8" style="strokeWidth=1" target="6" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="200.0" y="30.0"/>
+<mxPoint as="targetPoint" x="490.0" y="70.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="18" parent="1" source="5" style="strokeWidth=1" target="8" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="390.0" y="130.0"/>
+<mxPoint as="targetPoint" x="330.0" y="50.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="19" parent="1" source="9" style="strokeWidth=1" target="10" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="140.0" y="210.0"/>
+<mxPoint as="targetPoint" x="200.0" y="90.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="20" parent="1" source="4" style="strokeWidth=1" target="3" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="310.0" y="210.0"/>
+<mxPoint as="targetPoint" x="460.0" y="190.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="21" parent="1" source="5" style="strokeWidth=1" target="6" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="390.0" y="130.0"/>
+<mxPoint as="targetPoint" x="490.0" y="80.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell id="22" parent="1" style="vertexStyle;fillColor=#F3EF71;strokeWidth=4" value="10" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="1030.0" y="460.0"/>
+</mxCell>
+<mxCell edge="1" id="23" parent="1" source="6" style="strokeWidth=1" target="22" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="490.0" y="70.0"/>
+<mxPoint as="targetPoint" x="630.0" y="160.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="24" parent="1" source="3" style="strokeWidth=1" target="22" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="470.0" y="200.0"/>
+<mxPoint as="targetPoint" x="640.0" y="180.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell id="25" parent="1" style="vertexStyle;fillColor=#DB6F65" value="11" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="843.0" y="307.0"/>
+</mxCell>
+<mxCell edge="1" id="26" parent="1" source="5" style="strokeWidth=1" target="25" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="770.0" y="210.0"/>
+<mxPoint as="targetPoint" x="860.0" y="330.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="27" parent="1" source="25" style="strokeWidth=1" target="22" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="870.0" y="330.0"/>
+<mxPoint as="targetPoint" x="1060.0" y="480.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell id="28" parent="1" style="vertexStyle;fillColor=#DB6F65" value="12" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="37.0" y="416.0"/>
+</mxCell>
+<mxCell id="29" parent="1" style="vertexStyle;fillColor=#DB6F65" value="13" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="318.0" y="410.0"/>
+</mxCell>
+<mxCell edge="1" id="30" parent="1" source="9" style="strokeWidth=1" target="29" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="340.0" y="220.0"/>
+<mxPoint as="targetPoint" x="330.0" y="430.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="31" parent="1" source="29" style="strokeWidth=1" target="3" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="340.0" y="440.0"/>
+<mxPoint as="targetPoint" x="560.0" y="440.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="32" parent="1" source="29" style="strokeWidth=1" target="28" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="340.0" y="440.0"/>
+<mxPoint as="targetPoint" x="70.0" y="440.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="33" parent="1" source="28" style="strokeWidth=1" target="7" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="60.0" y="440.0"/>
+<mxPoint as="targetPoint" x="50.0" y="220.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell id="34" parent="1" style="vertexStyle;fillColor=#DB6F65" value="14" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="74.0" y="616.0"/>
+</mxCell>
+<mxCell id="35" parent="1" style="vertexStyle;fillColor=#DB6F65" value="15" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="599.0" y="650.0"/>
+</mxCell>
+<mxCell id="36" parent="1" style="vertexStyle;fillColor=#DB6F65" value="16" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="302.0" y="573.0"/>
+</mxCell>
+<mxCell id="37" parent="1" style="vertexStyle;fillColor=#DB6F65" value="17" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="906.0" y="591.0"/>
+</mxCell>
+<mxCell edge="1" id="38" parent="1" source="37" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="22" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="930.0" y="620.0"/>
+<mxPoint as="targetPoint" x="1050.0" y="460.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="39" parent="1" source="37" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="35" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="930.0" y="620.0"/>
+<mxPoint as="targetPoint" x="610.0" y="690.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="40" parent="1" source="35" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="36" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="620.0" y="680.0"/>
+<mxPoint as="targetPoint" x="340.0" y="600.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="41" parent="1" source="36" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="34" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="330.0" y="600.0"/>
+<mxPoint as="targetPoint" x="100.0" y="640.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="42" parent="1" source="34" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="28" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="100.0" y="640.0"/>
+<mxPoint as="targetPoint" x="60.0" y="450.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="43" parent="1" source="36" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="29" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="330.0" y="600.0"/>
+<mxPoint as="targetPoint" x="340.0" y="440.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="44" parent="1" source="35" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="3" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="620.0" y="680.0"/>
+<mxPoint as="targetPoint" x="560.0" y="430.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell id="45" parent="1" style="vertexStyle;fillColor=#DB6F65" value="18" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="718.0" y="526.0"/>
+</mxCell>
+<mxCell edge="1" id="46" parent="1" source="45" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="22" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="740.0" y="550.0"/>
+<mxPoint as="targetPoint" x="1030.0" y="500.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="47" parent="1" source="45" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="3" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="740.0" y="550.0"/>
+<mxPoint as="targetPoint" x="560.0" y="450.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="48" parent="1" source="3" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="9" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="560.0" y="450.0"/>
+<mxPoint as="targetPoint" x="340.0" y="220.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell id="49" parent="1" style="vertexStyle;fillColor=#65D1DB" value="19" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="156.0" y="107.0"/>
+</mxCell>
+<mxCell edge="1" id="50" parent="1" source="49" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="2" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="180.0" y="130.0"/>
+<mxPoint as="targetPoint" x="60.0" y="50.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="51" parent="1" source="49" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="9" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="180.0" y="130.0"/>
+<mxPoint as="targetPoint" x="340.0" y="200.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="52" parent="1" source="49" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="10" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="180.0" y="130.0"/>
+<mxPoint as="targetPoint" x="340.0" y="60.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell id="53" parent="1" style="vertexStyle;fillColor=#DB6F65" value="20" vertex="1">
+<mxGeometry as="geometry" height="50.0" width="50.0" x="186.0" y="323.0"/>
+</mxCell>
+<mxCell edge="1" id="54" parent="1" source="49" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="53" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="180.0" y="130.0"/>
+<mxPoint as="targetPoint" x="210.0" y="340.0"/>
+</mxGeometry>
+</mxCell>
+<mxCell edge="1" id="55" parent="1" source="53" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="29" value="">
+<mxGeometry as="geometry" relative="1">
+<mxPoint as="sourcePoint" x="210.0" y="350.0"/>
+<mxPoint as="targetPoint" x="350.0" y="430.0"/>
+</mxGeometry>
+</mxCell>
+</root>
+</mxGraphModel>
+<mxStylesheet>
+<add as="defaultEdge">
+<add as="endArrow" value="none"/>
+<add as="shape" value="connector"/>
+<add as="fontColor" value="#446299"/>
+<add as="strokeColor" value="#6482B9"/>
+<add as="align" value="center"/>
+<add as="verticalAlign" value="middle"/>
+</add>
+</mxStylesheet>
+</Modgraf>

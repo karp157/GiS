@@ -20,10 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Klasa rozwiązuje problem najkrótsza ścieżka.
@@ -35,6 +32,7 @@ import java.util.Set;
 public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSource.mxIEventListener
 {
 
+	public static String COLOR_DEFAULT = "c3d9ff";
 	public static String COLOR_RED = "DB6F65";
 	public static String COLOR_BLUE = "65D1DB";
 	public static String COLOR_YELLOW = "F3EF71";
@@ -47,8 +45,6 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	public MyAlgorithm(Editor e)
 	{
 		super(e);
-		editor.getGraphComponent().addListener(mxEvent.CELLS_MOVED, this);
-		editor.getGraphComponent().addListener(mxEvent.CELLS_ADDED, this);
 		editor.getGraphComponent().getGraphControl().addMouseListener(new MouseListener()
 		{
 			@Override
@@ -71,7 +67,7 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 					if (selectedVertex != selectionId)
 					{
 						System.out.println("new selection");
-						move();
+						movePlayer();
 						selectedVertex = selectionId;
 					}
 				}
@@ -127,11 +123,23 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 			  JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	protected Collection<String> findResultVertices()
+	{
+		Set<String> resultSet = new HashSet<String>();
+		Graph<String, DefaultEdge> graphCopy = new SimpleGraph(DefaultEdge.class);
+		Graphs.addGraph(graphCopy, editor.getGraphT());
+
+		List<DefaultEdge> result = DijkstraShortestPath.findPathBetween(graphCopy, startVertex, endVertex);
+
+		return resultSet;
+	}
+
+
 	private void createGraphicalResult(List<DefaultEdge> result)
 	{
 		int width = 4;
-		changeVertexStrokeWidth(startVertex, width);
-		changeVertexStrokeWidth(endVertex, width);
+		//		changeVertexStrokeWidth(startVertex, width);
+		//		changeVertexStrokeWidth(endVertex, width);
 		for (DefaultEdge edge : result)
 			changeEdgeStrokeWidth(edge, width);
 		editor.getGraphComponent().refresh();
@@ -174,6 +182,37 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		editor.setText(sb.toString());
 	}
 
+	protected void clearAllEdges()
+	{
+		for (Object edge : editor.getGraphT().edgeSet())
+		{
+			changeEdgeStrokeWidth((DefaultEdge) edge, 1);
+		}
+	}
+
+	protected void startGame()
+	{
+		System.out.println("Start game clicked");
+
+		startVertex = endVertex = null;
+		player1Vertices.clear();
+		enemyVertices.clear();
+
+		Object parent = editor.getGraphComponent().getGraph().getDefaultParent();
+		Object[] childVertices = editor.getGraphComponent().getGraph().getChildVertices(parent);
+		Object[] childEdges = editor.getGraphComponent().getGraph().getChildEdges(parent);
+		System.out.println("Child vertices:" + childVertices.length);
+		for (Object cell : childVertices)
+		{
+			colorVertex((mxCell) cell, COLOR_DEFAULT);
+			changeVertexStrokeWidth(((mxCell) cell).getId(), 1);
+		}
+		clearAllEdges();
+		markStartVertices();
+
+		editor.getGraphComponent().getGraph().setSelectionCell(null);
+	}
+
 	protected boolean canMove()
 	{
 		if (startVertex == null || endVertex == null)
@@ -189,11 +228,19 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		}
 
 		mxCell cell = (mxCell) editor.getGraphComponent().getGraph().getSelectionCell();
-		String cellId = cell.getId();
-		if (player1Vertices.contains(cellId) || enemyVertices.contains(cellId) || startVertex.equals(cellId) || endVertex.equals(cellId))
+		if (!canSelectVertex(cell.getId()))
 		{
 			JOptionPane.showMessageDialog(editor.getGraphComponent(), "Can't select this vertex",
 			  "Info", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
+	}
+
+	protected boolean canSelectVertex(String cellId)
+	{
+		if (player1Vertices.contains(cellId) || enemyVertices.contains(cellId) || startVertex.equals(cellId) || endVertex.equals(cellId))
+		{
 			return false;
 		}
 		return true;
@@ -204,15 +251,13 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		int vertexCounter = editor.getVertexCounter();
 		if (player1Vertices.size() + enemyVertices.size() + 2 >= vertexCounter)
 		{
-			JOptionPane.showMessageDialog(editor.getGraphComponent(), "All vertices selected",
-			  "Game Over", JOptionPane.INFORMATION_MESSAGE);
-			startVertex = endVertex = null;
 			return true;
 		}
 		return false;
 	}
 
-	protected boolean isPath()
+
+	protected Set<String> isPath()
 	{
 		Graph<String, DefaultEdge> graphCopy = new SimpleGraph(DefaultEdge.class);
 		Graphs.addGraph(graphCopy, editor.getGraphT());
@@ -220,20 +265,69 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		{
 			graphCopy.removeVertex(vertexId);
 		}
+		for (String vertexId : enemyVertices)
+		{
+			graphCopy.removeVertex(vertexId);
+		}
 
 		//		List<DefaultEdge> result = BellmanFordShortestPath.findPathBetween(editor.getGraphT(), startVertex, endVertex);
 		List<DefaultEdge> result = DijkstraShortestPath.findPathBetween(graphCopy, startVertex, endVertex);
+
+		Set<String> resultSet = new HashSet<String>();
 		if (result != null)
 		{
 			System.out.println("Result vertices: " + result.size());
+			createGraphicalResult(result);
+			for (DefaultEdge edge : result)
+			{
+				String source = (String) editor.getGraphT().getEdgeSource(edge);
+				String target = (String) editor.getGraphT().getEdgeTarget(edge);
+				if (canSelectVertex(source))
+				{
+					resultSet.add(source);
+				}
+				if (canSelectVertex(target))
+				{
+					resultSet.add(target);
+				}
+			}
 		}
 		else
-			JOptionPane.showMessageDialog(editor.getGraphComponent(), "Solution not found", "information",
-			  JOptionPane.INFORMATION_MESSAGE);
+		{
+			System.out.println("Solution not found");
+		}
+
+		return resultSet;
+	}
+
+	protected boolean selectRandomVertex()
+	{
+		Object parent = editor.getGraphComponent().getGraph().getDefaultParent();
+		Object[] childVertices = editor.getGraphComponent().getGraph().getChildVertices(parent);
+
 		return false;
 	}
 
-	protected boolean move()
+	protected boolean moveEnemy()
+	{
+		Object parent = editor.getGraphComponent().getGraph().getDefaultParent();
+		Object[] childVertices = editor.getGraphComponent().getGraph().getChildVertices(parent);
+
+		Graph<String, DefaultEdge> graphT = this.editor.getGraphT();
+
+		Collection<String> resultCells = isPath();
+		if (!resultCells.isEmpty())
+		{
+			String selectedId = resultCells.iterator().next();
+			mxGraphModel model = (mxGraphModel) editor.getGraphComponent().getGraph().getModel();
+			mxCell selectedCell = (mxCell)model.getCell(selectedId);
+			colorVertex(selectedCell,COLOR_BLUE);
+			enemyVertices.add(selectedId);
+		}
+		return true;
+	}
+
+	protected boolean movePlayer()
 	{
 		if (!canMove())
 		{
@@ -250,11 +344,14 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 
 		if (isEndGame())
 		{
-
+			JOptionPane.showMessageDialog(editor.getGraphComponent(), "All vertices selected",
+			  "Game Over", JOptionPane.INFORMATION_MESSAGE);
+			startVertex = endVertex = null;
 		}
 		else
 		{
-			isPath();
+			clearAllEdges();
+			moveEnemy();
 		}
 
 		return true;
@@ -290,7 +387,6 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		mxGraphModel model = (mxGraphModel) this.editor.getGraphComponent().getGraph().getModel();
 		model.beginUpdate();
 		String style = cell.getStyle();
-		System.out.println("Cell style: " + style);
 		cell.setStyle("vertexStyle;fillColor=#" + color);
 		model.endUpdate();
 		editor.getGraphComponent().refresh();
@@ -312,16 +408,7 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			System.out.println("Start game clicked");
-			if (editor.getGraphComponent().getGraph().getSelectionCount() != 2)
-			{
-				JOptionPane.showMessageDialog(editor.getGraphComponent(), "Select 2 start vertices",
-				  "Information", JOptionPane.ERROR_MESSAGE);
-			}
-			else
-			{
-				markStartVertices();
-			}
+			startGame();
 		}
 	}
 
@@ -336,7 +423,7 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		public void actionPerformed(ActionEvent e)
 		{
 			System.out.println("Make move clicked");
-			move();
+			movePlayer();
 
 		}
 	}

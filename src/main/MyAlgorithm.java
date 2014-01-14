@@ -2,8 +2,10 @@ package main;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGraphModel;
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource;
+import com.mxgraph.view.mxGraph;
 import modgraf.algorithm.ModgrafAbstractAlgorithm;
 import modgraf.view.Editor;
 import org.jgrapht.Graph;
@@ -36,6 +38,10 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	public static String COLOR_BLUE = "65D1DB";
 	public static String COLOR_YELLOW = "F3EF71";
 
+	public static int WINNER_PLAYER = 1;
+	public static int WINNER_ENEMY = 2;
+	public static int WINNER_DRAW = 3;
+
 	protected Set<String> player1Vertices = new HashSet<String>();
 	protected Set<String> enemyVertices = new HashSet<String>();
 
@@ -62,7 +68,14 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 				System.out.println("mouse released");
 				if (!editor.getGraphComponent().getGraph().isSelectionEmpty())
 				{
-					String selectionId = ((mxCell) editor.getGraphComponent().getGraph().getSelectionCell()).getId();
+					mxCell selectionCell = (mxCell) editor.getGraphComponent().getGraph().getSelectionCell();
+					if (!selectionCell.isVertex())
+					{
+						System.out.println("Edge was selected");
+						return;
+					}
+
+					String selectionId = selectionCell.getId();
 					if (selectedVertex != selectionId)
 					{
 						System.out.println("new selection");
@@ -115,32 +128,28 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		if (result != null)
 		{
 			createTextResult(result);
-			createGraphicalResult(result);
+			showPath(result, COLOR_BLUE);
 		}
 		else
 			JOptionPane.showMessageDialog(editor.getGraphComponent(), "message-no-solution", "information",
 			  JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	protected Collection<String> findResultVertices()
-	{
-		Set<String> resultSet = new HashSet<String>();
-		Graph<String, DefaultEdge> graphCopy = new SimpleGraph(DefaultEdge.class);
-		Graphs.addGraph(graphCopy, editor.getGraphT());
-
-		List<DefaultEdge> result = DijkstraShortestPath.findPathBetween(graphCopy, startVertex, endVertex);
-
-		return resultSet;
-	}
-
-
-	private void createGraphicalResult(List<DefaultEdge> result)
+	private void showPath(List<DefaultEdge> result, String color)
 	{
 		int width = 4;
-		//		changeVertexStrokeWidth(startVertex, width);
-		//		changeVertexStrokeWidth(endVertex, width);
+		Graph<String, DefaultEdge> graphT = this.editor.getGraphT();
+		mxGraph graph = this.editor.getGraphComponent().getGraph();
+		mxGraphModel model = (mxGraphModel) graph.getModel();
 		for (DefaultEdge edge : result)
-			changeEdgeStrokeWidth(edge, width);
+		{
+			String source = (String) graphT.getEdgeSource(edge);
+			String target = (String) graphT.getEdgeTarget(edge);
+			String edgeId = this.editor.getEdgeId(source, target);
+			Object[] edges = { model.getCell(edgeId) };
+			graph.setCellStyle("vertexStyle;fillColor=#" + color, edges);
+			graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, Integer.toString(width), edges);
+		}
 		editor.getGraphComponent().refresh();
 	}
 
@@ -183,9 +192,18 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 
 	protected void clearAllEdges()
 	{
-		for (Object edge : editor.getGraphT().edgeSet())
+		int width = 1;
+		Graph<String, DefaultEdge> graphT = this.editor.getGraphT();
+		mxGraph graph = this.editor.getGraphComponent().getGraph();
+		mxGraphModel model = (mxGraphModel) graph.getModel();
+		for (DefaultEdge edge : editor.getGraphT().edgeSet())
 		{
-			changeEdgeStrokeWidth((DefaultEdge) edge, 1);
+			String source = (String) graphT.getEdgeSource(edge);
+			String target = (String) graphT.getEdgeTarget(edge);
+			String edgeId = this.editor.getEdgeId(source, target);
+			Object[] edges = { model.getCell(edgeId) };
+			graph.setCellStyle("vertexStyle;fillColor=#" + COLOR_DEFAULT, edges);
+			graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, Integer.toString(width), edges);
 		}
 	}
 
@@ -216,22 +234,8 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	{
 		JOptionPane.showMessageDialog(editor.getGraphComponent(), "All vertices selected",
 		  "Game Over", JOptionPane.INFORMATION_MESSAGE);
+		checkWinner();
 		startVertex = endVertex = null;
-
-		//find computer path
-		Set<String> resultCells = findPath(false, true);
-		if (!resultCells.isEmpty())
-		{
-
-		}
-
-		//find user path
-		resultCells = findPath(true, false);
-		if (!resultCells.isEmpty())
-		{
-
-		}
-
 	}
 
 	protected boolean canMove()
@@ -278,7 +282,7 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	}
 
 
-	protected Set<String> findPath(boolean includePlayerV, boolean includeEnemyV)
+	protected List<DefaultEdge> findPath(boolean includePlayerV, boolean includeEnemyV)
 	{
 		Graph<String, DefaultEdge> graphCopy = new SimpleGraph(DefaultEdge.class);
 		Graphs.addGraph(graphCopy, editor.getGraphT());
@@ -300,28 +304,19 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		//		List<DefaultEdge> result = BellmanFordShortestPath.findPathBetween(editor.getGraphT(), startVertex, endVertex);
 		List<DefaultEdge> result = DijkstraShortestPath.findPathBetween(graphCopy, startVertex, endVertex);
 
-		Set<String> resultSet = new HashSet<String>();
-		if (result != null)
-		{
-			System.out.println("Result vertices: " + result.size());
-			for (DefaultEdge edge : result)
-			{
-				String source = (String) editor.getGraphT().getEdgeSource(edge);
-				String target = (String) editor.getGraphT().getEdgeTarget(edge);
-				resultSet.add(source);
-				resultSet.add(target);
-			}
-			if (resultSet.size()>2)
-			{
-				createGraphicalResult(result);
-			}
-//			selectVertex(resultSet);
-		}
-		else
-		{
-			System.out.println("Solution not found");
-		}
+		return result;
+	}
 
+	protected Set<String> pathOfVertices(List<DefaultEdge> edges)
+	{
+		Set<String> resultSet = new HashSet<String>();
+		for (DefaultEdge edge : edges)
+		{
+			String source = (String) editor.getGraphT().getEdgeSource(edge);
+			String target = (String) editor.getGraphT().getEdgeTarget(edge);
+			resultSet.add(source);
+			resultSet.add(target);
+		}
 		return resultSet;
 	}
 
@@ -345,26 +340,25 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	protected boolean moveEnemy()
 	{
 		//try to build path solution
-		Set<String> resultCells = findPath(false, true);
-		if (!resultCells.isEmpty())
+		List<DefaultEdge> resultCells = findPath(false, true);
+		if (selectVertex(pathOfVertices(resultCells)))
 		{
-			selectVertex(resultCells);
+			showPath(resultCells, COLOR_RED);
 			return true;
 		}
 
 		//block other player's path
 		resultCells = findPath(true, false);
-		if (!resultCells.isEmpty())
+		if (selectVertex(pathOfVertices(resultCells)))
 		{
-			selectVertex(resultCells);
+			showPath(resultCells, COLOR_BLUE);
 			return true;
 		}
 
 		//find any available vertex
-		resultCells = findAvailableVertices();
-		if (!resultCells.isEmpty())
+		Set<String> availableCells = findAvailableVertices();
+		if (selectVertex(availableCells))
 		{
-			selectVertex(resultCells);
 			return true;
 		}
 
@@ -374,11 +368,18 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	protected boolean selectVertex(Set<String> resultCells)
 	{
 		Iterator<String> iterator = resultCells.iterator();
-		String selectedId = iterator.next();
-		mxGraphModel model = (mxGraphModel) editor.getGraphComponent().getGraph().getModel();
-		mxCell selectedCell = (mxCell) model.getCell(selectedId);
-		colorVertex(selectedCell, COLOR_BLUE);
-		enemyVertices.add(selectedId);
+		while (iterator.hasNext())
+		{
+			String selectedId = iterator.next();
+			if (canSelectVertex(selectedId))
+			{
+				mxGraphModel model = (mxGraphModel) editor.getGraphComponent().getGraph().getModel();
+				mxCell selectedCell = (mxCell) model.getCell(selectedId);
+				colorVertex(selectedCell, COLOR_BLUE);
+				enemyVertices.add(selectedId);
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -392,7 +393,6 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 
 		mxCell cell = (mxCell) editor.getGraphComponent().getGraph().getSelectionCell();
 
-		//		editor.getGraphComponent().
 		String cellId = cell.getId();
 		colorVertex(cell, COLOR_RED);
 		player1Vertices.add(cellId);
@@ -411,89 +411,97 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 			endGame();
 			return true;
 		}
-
 		return true;
-
 	}
 
 
-    //      Checking who is the winner at the end of the game
-    protected void checkWinner()
-    {
-        Graph<String, DefaultEdge> graphCopy = new SimpleGraph(DefaultEdge.class);
-        Graphs.addGraph(graphCopy, editor.getGraphT());
-        for (String vertexId : enemyVertices)
-        {
-            graphCopy.removeVertex(vertexId);
-        }
+	//      Checking who is the winner at the end of the game
+	protected void checkWinner()
+	{
+		int playerLength = 0, enemyLength = 0, winner;
+		boolean playerPahtFound = false, enemyPathFound = false;
 
-        List<DefaultEdge> result = DijkstraShortestPath.findPathBetween(graphCopy, startVertex, endVertex);
+		//Player path
+		List<DefaultEdge> result = findPath(true, false);
+		if (result != null)
+		{
+			playerPahtFound = true;
+			playerLength = result.size();
+			System.out.println("Result vertices: " + result.size());
+			showPath(result, COLOR_RED);
+			JOptionPane.showMessageDialog(editor.getGraphComponent(), "Player built a path",
+			  "Game Over", JOptionPane.INFORMATION_MESSAGE);
+		}
 
-        Set<String> resultSet = new HashSet<String>();
-        if (result != null)
-        {
-            System.out.println("Result vertices: " + result.size());
-            createGraphicalResult(result);
-            for (DefaultEdge edge : result)
-            {
-                String source = (String) editor.getGraphT().getEdgeSource(edge);
-                String target = (String) editor.getGraphT().getEdgeTarget(edge);
-                if (canSelectVertex(source))
-                {
-                    resultSet.add(source);
-                }
-                if (canSelectVertex(target))
-                {
-                    resultSet.add(target);
-                }
-            }
+		//find enemy path
+		result = findPath(false, true);
 
-            JOptionPane.showMessageDialog(editor.getGraphComponent(), "Human win",
-                    "Game Over", JOptionPane.INFORMATION_MESSAGE);
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(editor.getGraphComponent(), "Human has no connection",
-                    "Game Over", JOptionPane.INFORMATION_MESSAGE);
-        }
+		if (result != null)
+		{
+			enemyPathFound = true;
+			enemyLength = result.size();
+			System.out.println("Result vertices: " + result.size());
+			showPath(result, COLOR_BLUE);
+			JOptionPane.showMessageDialog(editor.getGraphComponent(), "Enemy built a path",
+			  "Game Over", JOptionPane.INFORMATION_MESSAGE);
+		}
 
-        graphCopy = new SimpleGraph(DefaultEdge.class);
-        Graphs.addGraph(graphCopy, editor.getGraphT());
-        for (String vertexId : player1Vertices)
-        {
-            graphCopy.removeVertex(vertexId);
-        }
+		winner = getWinner(playerPahtFound, enemyPathFound, playerLength, enemyLength);
+		String message = "";
+		if (winner == WINNER_PLAYER)
+		{
+			message = "Player won";
+		}else if (winner == WINNER_ENEMY)
+		{
+			message = "Enemy won";
+		}
+		else
+		{
+			message = "Draw";
+		}
+		JOptionPane.showMessageDialog(editor.getGraphComponent(), message,
+		  "Game Over", JOptionPane.INFORMATION_MESSAGE);
+	}
 
-        result = DijkstraShortestPath.findPathBetween(graphCopy, startVertex, endVertex);
-        resultSet = new HashSet<String>();
-
-        if (result != null)
-        {
-            System.out.println("Result vertices: " + result.size());
-            createGraphicalResult(result);
-            for (DefaultEdge edge : result)
-            {
-                String source = (String) editor.getGraphT().getEdgeSource(edge);
-                String target = (String) editor.getGraphT().getEdgeTarget(edge);
-                if (canSelectVertex(source))
-                {
-                    resultSet.add(source);
-                }
-                if (canSelectVertex(target))
-                {
-                    resultSet.add(target);
-                }
-            }
-
-            JOptionPane.showMessageDialog(editor.getGraphComponent(), "Enemy win",
-                    "Game Over", JOptionPane.INFORMATION_MESSAGE);
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(editor.getGraphComponent(), "Enemy has no connection",
-                    "Game Over", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
+	protected int getWinner(boolean playerPathFound, boolean enemyPathFound, int playerLength, int enemyLength)
+	{
+		if (playerPathFound)
+		{
+			if (enemyPathFound)
+			{
+				if (playerLength < enemyLength)
+				{
+					System.out.println("Player won");
+					return WINNER_PLAYER;
+				}
+				else if (playerLength == enemyLength)
+				{
+					System.out.println("Draw");
+					return WINNER_DRAW;
+				}
+				else
+				{
+					System.out.println("Enemy won");
+					return WINNER_ENEMY;
+				}
+			}
+			System.out.println("Player wins");
+			return WINNER_PLAYER;
+		}
+		else
+		{
+			if (enemyPathFound)
+			{
+				System.out.println("Enemy wins");
+				return WINNER_ENEMY;
+			}
+			else
+			{
+				System.out.println("Draw");
+				return WINNER_DRAW;
+			}
+		}
+	}
 
 	protected boolean markStartVertices()
 	{
@@ -549,21 +557,4 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		}
 	}
 
-	class ActionMakeMoveListener implements ActionListener
-	{
-		ActionMakeMoveListener()
-		{
-			System.out.println("Start listener created");
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			System.out.println("Make move clicked");
-			movePlayer();
-
-		}
-	}
 }
-
-

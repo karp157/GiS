@@ -3,31 +3,31 @@
 <root>
 <mxCell id="0"/>
 <mxCell id="1" parent="0"/>
-<mxCell id="2" parent="1" style="vertexStyle;fillColor=#F3EF71;strokeWidth=4" value="1" vertex="1">
+<mxCell id="2" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="1" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="20.0" y="10.0"/>
 </mxCell>
-<mxCell id="3" parent="1" style="vertexStyle;fillColor=#65D1DB" value="2" vertex="1">
+<mxCell id="3" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="2" vertex="1">
 <mxGeometry as="geometry" height="70.0" width="50.0" x="530.0" y="410.0"/>
 </mxCell>
-<mxCell id="4" parent="1" style="vertexStyle;fillColor=#DB6F65" value="3" vertex="1">
+<mxCell id="4" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="3" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="550.0" y="200.0"/>
 </mxCell>
-<mxCell id="5" parent="1" style="vertexStyle;fillColor=#DB6F65" value="4" vertex="1">
+<mxCell id="5" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="4" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="740.0" y="180.0"/>
 </mxCell>
 <mxCell id="6" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="5" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="820.0" y="20.0"/>
 </mxCell>
-<mxCell id="7" parent="1" style="vertexStyle;fillColor=#65D1DB" value="6" vertex="1">
+<mxCell id="7" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="6" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="10.0" y="180.0"/>
 </mxCell>
-<mxCell id="8" parent="1" style="vertexStyle;fillColor=#DB6F65" value="7" vertex="1">
+<mxCell id="8" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="7" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="560.0" y="20.0"/>
 </mxCell>
-<mxCell id="9" parent="1" style="vertexStyle;fillColor=#DB6F65" value="8" vertex="1">
+<mxCell id="9" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="8" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="310.0" y="190.0"/>
 </mxCell>
-<mxCell id="10" parent="1" style="vertexStyle;fillColor=#DB6F65" value="9" vertex="1">
+<mxCell id="10" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="9" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="330.0" y="30.0"/>
 </mxCell>
 <mxCell edge="1" id="11" parent="1" source="2" style="strokeWidth=1" target="7" value="">
@@ -96,7 +96,7 @@
 <mxPoint as="targetPoint" x="490.0" y="80.0"/>
 </mxGeometry>
 </mxCell>
-<mxCell id="22" parent="1" style="vertexStyle;fillColor=#F3EF71;strokeWidth=4" value="10" vertex="1">
+<mxCell id="22" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="10" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="1030.0" y="460.0"/>
 </mxCell>
 <mxCell edge="1" id="23" parent="1" source="6" style="strokeWidth=1" target="22" value="">
@@ -111,7 +111,7 @@
 <mxPoint as="targetPoint" x="640.0" y="180.0"/>
 </mxGeometry>
 </mxCell>
-<mxCell id="25" parent="1" style="vertexStyle;fillColor=#DB6F65" value="11" vertex="1">
+<mxCell id="25" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="11" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="843.0" y="307.0"/>
 </mxCell>
 <mxCell edge="1" id="26" parent="1" source="5" style="strokeWidth=1" target="25" value="">
@@ -126,10 +126,10 @@
 <mxPoint as="targetPoint" x="1060.0" y="480.0"/>
 </mxGeometry>
 </mxCell>
-<mxCell id="28" parent="1" style="vertexStyle;fillColor=#DB6F65" value="12" vertex="1">
+<mxCell id="28" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="12" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="37.0" y="416.0"/>
 </mxCell>
-<mxCell id="29" parent="1" style="vertexStyle;fillColor=#DB6F65" value="13" vertex="1">
+<mxCell id="29" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="13" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="318.0" y="410.0"/>
 </mxCell>
 <mxCell edge="1" id="30" parent="1" source="9" style="strokeWidth=1" target="29" value="">
@@ -156,16 +156,16 @@
 <mxPoint as="targetPoint" x="50.0" y="220.0"/>
 </mxGeometry>
 </mxCell>
-<mxCell id="34" parent="1" style="vertexStyle;fillColor=#DB6F65" value="14" vertex="1">
+<mxCell id="34" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="14" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="74.0" y="616.0"/>
 </mxCell>
-<mxCell id="35" parent="1" style="vertexStyle;fillColor=#DB6F65" value="15" vertex="1">
+<mxCell id="35" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="15" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="599.0" y="650.0"/>
 </mxCell>
-<mxCell id="36" parent="1" style="vertexStyle;fillColor=#DB6F65" value="16" vertex="1">
+<mxCell id="36" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="16" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="302.0" y="573.0"/>
 </mxCell>
-<mxCell id="37" parent="1" style="vertexStyle;fillColor=#DB6F65" value="17" vertex="1">
+<mxCell id="37" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="17" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="906.0" y="591.0"/>
 </mxCell>
 <mxCell edge="1" id="38" parent="1" source="37" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="22" value="">
@@ -210,7 +210,7 @@
 <mxPoint as="targetPoint" x="560.0" y="430.0"/>
 </mxGeometry>
 </mxCell>
-<mxCell id="45" parent="1" style="vertexStyle;fillColor=#DB6F65" value="18" vertex="1">
+<mxCell id="45" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="18" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="718.0" y="526.0"/>
 </mxCell>
 <mxCell edge="1" id="46" parent="1" source="45" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="22" value="">
@@ -231,7 +231,7 @@
 <mxPoint as="targetPoint" x="340.0" y="220.0"/>
 </mxGeometry>
 </mxCell>
-<mxCell id="49" parent="1" style="vertexStyle;fillColor=#65D1DB" value="19" vertex="1">
+<mxCell id="49" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="19" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="156.0" y="107.0"/>
 </mxCell>
 <mxCell edge="1" id="50" parent="1" source="49" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="2" value="">
@@ -252,7 +252,7 @@
 <mxPoint as="targetPoint" x="340.0" y="60.0"/>
 </mxGeometry>
 </mxCell>
-<mxCell id="53" parent="1" style="vertexStyle;fillColor=#DB6F65" value="20" vertex="1">
+<mxCell id="53" parent="1" style="vertexStyle;fillColor=#c3d9ff;strokeWidth=1" value="20" vertex="1">
 <mxGeometry as="geometry" height="50.0" width="50.0" x="186.0" y="323.0"/>
 </mxCell>
 <mxCell edge="1" id="54" parent="1" source="49" style="vertexStyle;fillColor=#DB6F65;strokeWidth=1" target="53" value="">
@@ -275,8 +275,8 @@
 <add as="shape" value="connector"/>
 <add as="fontColor" value="#446299"/>
 <add as="strokeColor" value="#6482B9"/>
-<add as="align" value="center"/>
 <add as="verticalAlign" value="middle"/>
+<add as="align" value="center"/>
 </add>
 </mxStylesheet>
 </Modgraf>

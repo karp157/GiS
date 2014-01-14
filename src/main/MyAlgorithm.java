@@ -259,16 +259,18 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 
 	protected Set<String> isPath()
 	{
+        //   Change the searching algorithm
+
 		Graph<String, DefaultEdge> graphCopy = new SimpleGraph(DefaultEdge.class);
 		Graphs.addGraph(graphCopy, editor.getGraphT());
 		for (String vertexId : player1Vertices)
 		{
 			graphCopy.removeVertex(vertexId);
 		}
-		for (String vertexId : enemyVertices)
+		/*for (String vertexId : enemyVertices)
 		{
 			graphCopy.removeVertex(vertexId);
-		}
+		}*/
 
 		//		List<DefaultEdge> result = BellmanFordShortestPath.findPathBetween(editor.getGraphT(), startVertex, endVertex);
 		List<DefaultEdge> result = DijkstraShortestPath.findPathBetween(graphCopy, startVertex, endVertex);
@@ -319,10 +321,14 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		if (!resultCells.isEmpty())
 		{
 			String selectedId = resultCells.iterator().next();
-			mxGraphModel model = (mxGraphModel) editor.getGraphComponent().getGraph().getModel();
-			mxCell selectedCell = (mxCell)model.getCell(selectedId);
-			colorVertex(selectedCell,COLOR_BLUE);
-			enemyVertices.add(selectedId);
+
+            if( !enemyVertices.contains(selectedId) )
+            {
+			    mxGraphModel model = (mxGraphModel) editor.getGraphComponent().getGraph().getModel();
+			    mxCell selectedCell = (mxCell)model.getCell(selectedId);
+			    colorVertex(selectedCell,COLOR_BLUE);
+			    enemyVertices.add(selectedId);
+            }
 		}
 		return true;
 	}
@@ -346,6 +352,11 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		{
 			JOptionPane.showMessageDialog(editor.getGraphComponent(), "All vertices selected",
 			  "Game Over", JOptionPane.INFORMATION_MESSAGE);
+
+            //   Checking who's the winner
+
+            checkWinner();
+
 			startVertex = endVertex = null;
 		}
 		else
@@ -357,6 +368,85 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		return true;
 
 	}
+
+
+    //      Checking who is the winner at the end of the game
+    protected void checkWinner()
+    {
+        Graph<String, DefaultEdge> graphCopy = new SimpleGraph(DefaultEdge.class);
+        Graphs.addGraph(graphCopy, editor.getGraphT());
+        for (String vertexId : enemyVertices)
+        {
+            graphCopy.removeVertex(vertexId);
+        }
+
+        List<DefaultEdge> result = DijkstraShortestPath.findPathBetween(graphCopy, startVertex, endVertex);
+
+        Set<String> resultSet = new HashSet<String>();
+        if (result != null)
+        {
+            System.out.println("Result vertices: " + result.size());
+            createGraphicalResult(result);
+            for (DefaultEdge edge : result)
+            {
+                String source = (String) editor.getGraphT().getEdgeSource(edge);
+                String target = (String) editor.getGraphT().getEdgeTarget(edge);
+                if (canSelectVertex(source))
+                {
+                    resultSet.add(source);
+                }
+                if (canSelectVertex(target))
+                {
+                    resultSet.add(target);
+                }
+            }
+
+            JOptionPane.showMessageDialog(editor.getGraphComponent(), "Human win",
+                    "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(editor.getGraphComponent(), "Human has no connection",
+                    "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        graphCopy = new SimpleGraph(DefaultEdge.class);
+        Graphs.addGraph(graphCopy, editor.getGraphT());
+        for (String vertexId : player1Vertices)
+        {
+            graphCopy.removeVertex(vertexId);
+        }
+
+        result = DijkstraShortestPath.findPathBetween(graphCopy, startVertex, endVertex);
+        resultSet = new HashSet<String>();
+
+        if (result != null)
+        {
+            System.out.println("Result vertices: " + result.size());
+            createGraphicalResult(result);
+            for (DefaultEdge edge : result)
+            {
+                String source = (String) editor.getGraphT().getEdgeSource(edge);
+                String target = (String) editor.getGraphT().getEdgeTarget(edge);
+                if (canSelectVertex(source))
+                {
+                    resultSet.add(source);
+                }
+                if (canSelectVertex(target))
+                {
+                    resultSet.add(target);
+                }
+            }
+
+            JOptionPane.showMessageDialog(editor.getGraphComponent(), "Enemy win",
+                    "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(editor.getGraphComponent(), "Enemy has no connection",
+                    "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 
 	protected boolean markStartVertices()
 	{

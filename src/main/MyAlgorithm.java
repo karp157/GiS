@@ -11,7 +11,6 @@ import modgraf.view.Editor;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.WeightedGraph;
-import org.jgrapht.alg.BellmanFordShortestPath;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
@@ -24,15 +23,13 @@ import java.awt.event.MouseListener;
 import java.util.*;
 
 /**
- * Klasa rozwiązuje problem najkrótsza ścieżka.
+ * Klasa z logiką gry opartej na grafie.
  *
- * @author Daniel Pogrebniak
+ * @author Michał Karpiuk, Michał Cholewiński
  * @see ModgrafAbstractAlgorithm
- * @see BellmanFordShortestPath
  */
 public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSource.mxIEventListener
 {
-
 	public static String COLOR_DEFAULT = "c3d9ff";
 	public static String COLOR_RED = "DB6F65";
 	public static String COLOR_BLUE = "65D1DB";
@@ -55,10 +52,12 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	protected int mode = MODE_PLAYER_COMPUTER;
 	protected int player = PLAYER;
 
+	StringBuilder sb = new StringBuilder();
 
 	public MyAlgorithm(Editor e)
 	{
 		super(e);
+		startVertex = endVertex = null;
 		editor.getGraphComponent().getGraphControl().addMouseListener(new MouseListener()
 		{
 			@Override
@@ -136,7 +135,6 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		Graph<String, DefaultEdge> graphCopy = new SimpleGraph(DefaultEdge.class);
 		Graphs.addGraph(graphCopy, editor.getGraphT());
 
-		//		List<DefaultEdge> result = BellmanFordShortestPath.findPathBetween(editor.getGraphT(), startVertex, endVertex);
 		List<DefaultEdge> result = DijkstraShortestPath.findPathBetween(graphCopy, startVertex, endVertex);
 		if (result != null)
 		{
@@ -223,8 +221,9 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	protected void startGame()
 	{
 		System.out.println("Start game clicked");
+		sb = new StringBuilder();
+		editor.setText(sb.toString());
 
-		startVertex = endVertex = null;
 		player1Vertices.clear();
 		enemyVertices.clear();
 
@@ -232,21 +231,27 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		Object[] childVertices = editor.getGraphComponent().getGraph().getChildVertices(parent);
 		Object[] childEdges = editor.getGraphComponent().getGraph().getChildEdges(parent);
 		System.out.println("Child vertices:" + childVertices.length);
-		for (Object cell : childVertices)
-		{
-			colorVertex((mxCell) cell, COLOR_DEFAULT);
-			changeVertexStrokeWidth(((mxCell) cell).getId(), 1);
-		}
 		clearAllEdges();
 		markStartVertices();
+		for (Object cell : childVertices)
+		{
+			mxCell cell1 = (mxCell) cell;
+			if (cell1.getId() == startVertex || cell1.getId() == endVertex)
+			{
+				continue;
+			}
+			colorVertex(cell1, COLOR_DEFAULT);
+			changeVertexStrokeWidth(((mxCell) cell).getId(), 1);
+		}
 
 		editor.getGraphComponent().getGraph().setSelectionCell(null);
 	}
 
 	protected void endGame()
 	{
+		sb.append("End of game\n");
+		editor.setText(sb.toString());
 		checkWinner();
-		startVertex = endVertex = null;
 	}
 
 	protected boolean canMove()
@@ -312,7 +317,6 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 			}
 		}
 
-		//		List<DefaultEdge> result = BellmanFordShortestPath.findPathBetween(editor.getGraphT(), startVertex, endVertex);
 		List<DefaultEdge> result = DijkstraShortestPath.findPathBetween(graphCopy, startVertex, endVertex);
 
 		return result;
@@ -359,6 +363,17 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		{
 			thisMovePlayer = ENEMY;
 		}
+		if (thisMovePlayer == PLAYER)
+		{
+			sb.append("Player's vertex selected\n");
+			editor.setText(sb.toString());
+		}
+		else
+		{
+			sb.append("Enemys's vertex selected\n");
+			editor.setText(sb.toString());
+		}
+
 		//try to build path solution
 		Random r = new Random();
 		boolean withPlayer1Vertices = false, withEnemyVertices = true;
@@ -454,6 +469,8 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		String cellId = cell.getId();
 		colorVertex(cell, COLOR_RED);
 		player1Vertices.add(cellId);
+		sb.append("Player's vertex selected\n");
+		editor.setText(sb.toString());
 
 		if (isEndGame())
 		{
@@ -476,7 +493,7 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 
 		//Player path
 		List<DefaultEdge> result = findPath(true, false);
-		if (result != null && result.size()>1)
+		if (result != null && result.size() > 1)
 		{
 			playerPahtFound = true;
 			playerLength = result.size();
@@ -489,7 +506,7 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		//find enemy path
 		result = findPath(false, true);
 
-		if (result != null && result.size()>1)
+		if (result != null && result.size() > 1)
 		{
 			enemyPathFound = true;
 			enemyLength = result.size();
@@ -561,9 +578,17 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	{
 		if (editor.getGraphComponent().getGraph().getSelectionCount() != 2)
 		{
-			JOptionPane.showMessageDialog(editor.getGraphComponent(), "Select 2 start vertices",
-			  "Information", JOptionPane.ERROR_MESSAGE);
-			return false;
+			if (startVertex == null || endVertex == null)
+			{
+
+				JOptionPane.showMessageDialog(editor.getGraphComponent(), "Select 2 start vertices",
+				  "Information", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
 		else
 		{
@@ -621,9 +646,14 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			if (mode == MODE_COMPUTER_COMPUTER && startVertex!=null)
+			if (mode == MODE_COMPUTER_COMPUTER && startVertex != null)
 			{
 				moveEnemy(player);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(editor.getGraphComponent(), "Operacja niedostępna",
+				  "Info", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 	}
@@ -642,7 +672,7 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		public void actionPerformed(ActionEvent e)
 		{
 			MyAlgorithm.this.mode = mode;
-			System.out.println("setting mode: "+ MyAlgorithm.this.mode);
+			System.out.println("setting mode: " + MyAlgorithm.this.mode);
 		}
 	}
 

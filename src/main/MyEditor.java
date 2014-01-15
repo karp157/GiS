@@ -41,7 +41,6 @@ public class MyEditor extends Editor
 			frame.add(BorderLayout.EAST, createPanel(myAlgorithm));
 
 			frame.setBounds(100,100,1400,750);
-
 		}
 		catch (Exception e1)
 		{

@@ -355,6 +355,10 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	{
 		clearAllEdges();
 		player = oppositePlayer(thisMovePlayer);
+		if (mode == MODE_PLAYER_COMPUTER)
+		{
+			thisMovePlayer = ENEMY;
+		}
 		//try to build path solution
 		Random r = new Random();
 		boolean withPlayer1Vertices = false, withEnemyVertices = true;
@@ -367,7 +371,7 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		if (selectVertex(pathOfVertices(resultCells), thisMovePlayer))
 		{
 			showPath(resultCells, COLOR_RED);
-			checkIsEndAndStartOver(thisMovePlayer);
+			checkIsEnd(thisMovePlayer);
 			return;
 		}
 
@@ -376,7 +380,7 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		if (selectVertex(pathOfVertices(resultCells), thisMovePlayer))
 		{
 			showPath(resultCells, COLOR_BLUE);
-			checkIsEndAndStartOver(thisMovePlayer);
+			checkIsEnd(thisMovePlayer);
 			return;
 		}
 
@@ -384,12 +388,12 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		Set<String> availableCells = findAvailableVertices();
 		if (selectVertex(availableCells, thisMovePlayer))
 		{
-			checkIsEndAndStartOver(thisMovePlayer);
+			checkIsEnd(thisMovePlayer);
 			return;
 		}
 	}
 
-	protected void checkIsEndAndStartOver(int player)
+	protected void checkIsEnd(int player)
 	{
 		if (isEndGame())
 		{
@@ -472,7 +476,7 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 
 		//Player path
 		List<DefaultEdge> result = findPath(true, false);
-		if (result != null)
+		if (result != null && result.size()>1)
 		{
 			playerPahtFound = true;
 			playerLength = result.size();
@@ -485,7 +489,7 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		//find enemy path
 		result = findPath(false, true);
 
-		if (result != null)
+		if (result != null && result.size()>1)
 		{
 			enemyPathFound = true;
 			enemyLength = result.size();

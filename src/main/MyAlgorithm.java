@@ -42,10 +42,19 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	public static int WINNER_ENEMY = 2;
 	public static int WINNER_DRAW = 3;
 
+	public static int MODE_PLAYER_COMPUTER = 1;
+	public static int MODE_COMPUTER_COMPUTER = 2;
+
+	public static int PLAYER = 1;
+	public static int ENEMY = 2;
+
 	protected Set<String> player1Vertices = new HashSet<String>();
 	protected Set<String> enemyVertices = new HashSet<String>();
 
 	protected String selectedVertex;
+	protected int mode = MODE_PLAYER_COMPUTER;
+	protected int player = PLAYER;
+
 
 	public MyAlgorithm(Editor e)
 	{
@@ -66,6 +75,10 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 			public void mouseReleased(MouseEvent e)
 			{
 				System.out.println("mouse released");
+				if (mode == MODE_COMPUTER_COMPUTER)
+				{
+					return;
+				}
 				if (!editor.getGraphComponent().getGraph().isSelectionEmpty())
 				{
 					mxCell selectionCell = (mxCell) editor.getGraphComponent().getGraph().getSelectionCell();
@@ -232,8 +245,6 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 
 	protected void endGame()
 	{
-		JOptionPane.showMessageDialog(editor.getGraphComponent(), "All vertices selected",
-		  "Game Over", JOptionPane.INFORMATION_MESSAGE);
 		checkWinner();
 		startVertex = endVertex = null;
 	}
@@ -310,12 +321,15 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 	protected Set<String> pathOfVertices(List<DefaultEdge> edges)
 	{
 		Set<String> resultSet = new HashSet<String>();
-		for (DefaultEdge edge : edges)
+		if (edges != null)
 		{
-			String source = (String) editor.getGraphT().getEdgeSource(edge);
-			String target = (String) editor.getGraphT().getEdgeTarget(edge);
-			resultSet.add(source);
-			resultSet.add(target);
+			for (DefaultEdge edge : edges)
+			{
+				String source = (String) editor.getGraphT().getEdgeSource(edge);
+				String target = (String) editor.getGraphT().getEdgeTarget(edge);
+				resultSet.add(source);
+				resultSet.add(target);
+			}
 		}
 		return resultSet;
 	}
@@ -337,35 +351,67 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		return availableVertices;
 	}
 
-	protected boolean moveEnemy()
+	protected void moveEnemy(int thisMovePlayer)
 	{
+		clearAllEdges();
+		player = oppositePlayer(thisMovePlayer);
 		//try to build path solution
-		List<DefaultEdge> resultCells = findPath(false, true);
-		if (selectVertex(pathOfVertices(resultCells)))
+		Random r = new Random();
+		boolean withPlayer1Vertices = false, withEnemyVertices = true;
+		if (r.nextInt() % 2 == 0)
+		{
+			withPlayer1Vertices = true;
+			withEnemyVertices = false;
+		}
+		List<DefaultEdge> resultCells = findPath(withPlayer1Vertices, withEnemyVertices);
+		if (selectVertex(pathOfVertices(resultCells), thisMovePlayer))
 		{
 			showPath(resultCells, COLOR_RED);
-			return true;
+			checkIsEndAndStartOver(thisMovePlayer);
+			return;
 		}
 
 		//block other player's path
-		resultCells = findPath(true, false);
-		if (selectVertex(pathOfVertices(resultCells)))
+		resultCells = findPath(!withPlayer1Vertices, !withEnemyVertices);
+		if (selectVertex(pathOfVertices(resultCells), thisMovePlayer))
 		{
 			showPath(resultCells, COLOR_BLUE);
-			return true;
+			checkIsEndAndStartOver(thisMovePlayer);
+			return;
 		}
 
 		//find any available vertex
 		Set<String> availableCells = findAvailableVertices();
-		if (selectVertex(availableCells))
+		if (selectVertex(availableCells, thisMovePlayer))
 		{
-			return true;
+			checkIsEndAndStartOver(thisMovePlayer);
+			return;
 		}
-
-		return false;
 	}
 
-	protected boolean selectVertex(Set<String> resultCells)
+	protected void checkIsEndAndStartOver(int player)
+	{
+		if (isEndGame())
+		{
+			endGame();
+			return;
+		}
+	}
+
+	protected int oppositePlayer(int player)
+	{
+		if (player == PLAYER)
+		{
+			return ENEMY;
+		}
+		else
+		{
+			return PLAYER;
+		}
+
+	}
+
+	protected boolean selectVertex(Set<String> resultCells, int player)
 	{
 		Iterator<String> iterator = resultCells.iterator();
 		while (iterator.hasNext())
@@ -375,8 +421,16 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 			{
 				mxGraphModel model = (mxGraphModel) editor.getGraphComponent().getGraph().getModel();
 				mxCell selectedCell = (mxCell) model.getCell(selectedId);
-				colorVertex(selectedCell, COLOR_BLUE);
-				enemyVertices.add(selectedId);
+				if (player == PLAYER)
+				{
+					colorVertex(selectedCell, COLOR_RED);
+					player1Vertices.add(selectedId);
+				}
+				else
+				{
+					colorVertex(selectedCell, COLOR_BLUE);
+					enemyVertices.add(selectedId);
+				}
 				return true;
 			}
 		}
@@ -404,13 +458,8 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		}
 		clearAllEdges();
 
-		moveEnemy();
+		moveEnemy(player);
 
-		if (isEndGame())
-		{
-			endGame();
-			return true;
-		}
 		return true;
 	}
 
@@ -451,7 +500,8 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		if (winner == WINNER_PLAYER)
 		{
 			message = "Player won";
-		}else if (winner == WINNER_ENEMY)
+		}
+		else if (winner == WINNER_ENEMY)
 		{
 			message = "Enemy won";
 		}
@@ -554,6 +604,41 @@ public class MyAlgorithm extends ModgrafAbstractAlgorithm implements mxEventSour
 		public void actionPerformed(ActionEvent e)
 		{
 			startGame();
+		}
+	}
+
+	class ActionMoveComputerListener implements ActionListener
+	{
+		ActionMoveComputerListener()
+		{
+			System.out.println("Start listener created");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			if (mode == MODE_COMPUTER_COMPUTER && startVertex!=null)
+			{
+				moveEnemy(player);
+			}
+		}
+	}
+
+	class ActionChangeModeListener implements ActionListener
+	{
+		int mode;
+
+		ActionChangeModeListener(int mode)
+		{
+			this.mode = mode;
+			System.out.println("Start listener created");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			MyAlgorithm.this.mode = mode;
+			System.out.println("setting mode: "+ MyAlgorithm.this.mode);
 		}
 	}
 

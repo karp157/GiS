@@ -6,6 +6,9 @@ import modgraf.view.Toolbar;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 
 /**
@@ -17,6 +20,8 @@ public class MyEditor extends Editor
 	private boolean modified;
 	private JFrame frame;
 	private Toolbar toolbar;
+
+	protected JButton moveButton;
 
 	public MyEditor(Editor e)
 	{
@@ -35,7 +40,6 @@ public class MyEditor extends Editor
 
 			frame.add(BorderLayout.EAST, createPanel(myAlgorithm));
 
-//			frame.setSize(1400, 750);
 			frame.setBounds(100,100,1400,750);
 
 		}
@@ -48,12 +52,39 @@ public class MyEditor extends Editor
 	protected JPanel createPanel(MyAlgorithm myAlgorithm)
 	{
 		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
 		panel.setSize(120, 500);
+
 		JButton newGameButton = new JButton();
-		newGameButton.setBounds(10, 10, 100, 30);
 		newGameButton.setIcon(new ImageIcon("newGame.png"));
 		newGameButton.addActionListener(myAlgorithm.new ActionStartGameListener());
 		panel.add(newGameButton);
+
+		moveButton = new JButton();
+		moveButton.setIcon(new ImageIcon("move.png"));
+		moveButton.addActionListener(myAlgorithm.new ActionMoveComputerListener());
+		panel.add(moveButton);
+
+		//Create the radio buttons.
+		String firstOption = "Player vs Computer";
+		JRadioButton firstButton = new JRadioButton(firstOption);
+		firstButton.setActionCommand(firstOption);
+		firstButton.setSelected(true);
+
+		String secondOption = "Computer vs Computer";
+		JRadioButton secondButton = new JRadioButton(secondOption);
+		secondButton.setActionCommand(firstOption);
+
+		//Group the radio buttons.
+		ButtonGroup group = new ButtonGroup();
+		group.add(firstButton);
+		group.add(secondButton);
+		panel.add(firstButton);
+		panel.add(secondButton);
+
+		//Register a listener for the radio buttons.
+		firstButton.addActionListener(myAlgorithm.new ActionChangeModeListener(MyAlgorithm.MODE_PLAYER_COMPUTER));
+		secondButton.addActionListener(myAlgorithm.new ActionChangeModeListener(MyAlgorithm.MODE_COMPUTER_COMPUTER));
 
 		JLabel infoLabel = new JLabel("Game not started");
 		infoLabel.setName("infoLabel");
